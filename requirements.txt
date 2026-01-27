@@ -1,0 +1,6 @@
+flask
+playwright
+pandas
+matplotlib
+numpy
+gunicorn

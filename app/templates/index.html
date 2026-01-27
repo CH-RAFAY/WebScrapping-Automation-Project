@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking.com Scraper & Visualizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        @keyframes neon-blink {
+            0% { opacity: 1; text-shadow: 0 0 8px rgba(200, 255, 200, 0.6); }
+            50% { opacity: 0.4; text-shadow: none; }
+            100% { opacity: 1; text-shadow: 0 0 8px rgba(200, 255, 200, 0.6); }
+        }
+        .neon-text-btn {
+            color: #d0f0c0 !important; /* Dark greenish white (Tea Green) */
+            animation: neon-blink 1.5s infinite alternate;
+            font-weight: 500;
+        }
+        .neon-text-btn::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #00ffff; /* Previous Cyan blue dot */
+            border-radius: 50%;
+            margin-left: 8px;
+            box-shadow: 0 0 6px #00ffff;
+            vertical-align: middle;
+            margin-bottom: 2px;
+        }
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #0d6efd;
+            --accent-color: #0dcaf0;
+            --text-color: #e0e0e0;
+            --muted-text: #a0a0a0;
+        }
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+        }
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            color: var(--text-color);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2b32b2, #1488cc); /* Icy shiny blueish gradient */
+            border: 1px solid #4a90e2;
+            color: #ffffff;
+            padding: 10px 24px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            text-transform: none; /* Remove uppercase */
+            font-size: 1rem;
+            border-radius: 6px; /* Standard rounded corners */
+            box-shadow: 0 4px 15px rgba(20, 136, 204, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1488cc, #2b32b2);
+            border-color: #5dade2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(20, 136, 204, 0.6);
+            color: #fff;
+        }
+        .btn-success {
+            background-color: #198754;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+        .form-control {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            color: var(--text-color);
+        }
+        .form-control:focus {
+            background-color: #2c2c2c;
+            border-color: var(--accent-color);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+        }
+        .progress {
+            background-color: #333;
+            height: 10px;
+            border-radius: 5px;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        h1 {
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #a0a0a0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .alert-success {
+            background-color: rgba(25, 135, 84, 0.2);
+            border-color: #198754;
+            color: #75b798;
+        }
+        #start-section, #input-section, #progress-section, #result-section {
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container hero">
+    <div class="mb-5">
+        <h1 class="display-3 mb-3">Booking Scraper</h1>
+        <p class="lead" style="color: #a0a0a0; font-weight: 300; letter-spacing: 0.5px; font-size: 1.25rem;">Automated Data Collection & Analysis Engine</p>
+    </div>
+
+    <div id="start-section">
+        <button class="btn btn-primary" onclick="showInput()">
+            Initialize Scraping Process
+        </button>
+        <div class="mt-3">
+            <button type="button" class="btn btn-link text-decoration-none neon-text-btn" data-bs-toggle="modal" data-bs-target="#howToUseModal" style="font-size: 0.95rem;">
+                How to Use!
+            </button>
+        </div>
+    </div>
+
+    <!-- How To Use Modal -->
+    <div class="modal fade" id="howToUseModal" tabindex="-1" aria-labelledby="howToUseModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background-color: #1e1e1e; color: #e0e0e0; border: 1px solid #333;">
+                <div class="modal-header" style="border-bottom: 1px solid #333;">
+                    <h5 class="modal-title fw-bold" id="howToUseModalLabel">How It Works</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="mb-3" style="color: #4a90e2; font-weight: 600;">Technologies Powered By:</h6>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-dark border border-secondary text-light">Python</span>
+                                    <span class="badge bg-dark border border-secondary text-light">Flask</span>
+                                    <span class="badge bg-dark border border-secondary text-light">Playwright</span>
+                                    <span class="badge bg-dark border border-secondary text-light">Pandas</span>
+                                    <span class="badge bg-dark border border-secondary text-light">D3.js</span>
+                                    <span class="badge bg-dark border border-secondary text-light">Bootstrap 5</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h6 class="mb-3" style="color: #0dcaf0; font-weight: 600;">Workflow Steps:</h6>
+                        <div class="d-flex justify-content-between align-items-center text-center flex-wrap">
+                            <div class="step-card p-2">
+                                <div class="mb-2" style="font-size: 1.5rem;">⚙️</div>
+                                <div class="small fw-bold text-light">Configure</div>
+                                <div class="small" style="color: #a0a0a0;">Set record limit</div>
+                            </div>
+                            <div class="arrow" style="color: #a0a0a0; font-size: 1.2rem;">➜</div>
+                            <div class="step-card p-2">
+                                <div class="mb-2" style="font-size: 1.5rem;">🕷️</div>
+                                <div class="small fw-bold text-light">Scrape</div>
+                                <div class="small" style="color: #a0a0a0;">Auto-extract data</div>
+                            </div>
+                            <div class="arrow" style="color: #a0a0a0; font-size: 1.2rem;">➜</div>
+                            <div class="step-card p-2">
+                                <div class="mb-2" style="font-size: 1.5rem;">🧹</div>
+                                <div class="small fw-bold text-light">Process</div>
+                                <div class="small" style="color: #a0a0a0;">Clean & Cleanse</div>
+                            </div>
+                            <div class="arrow" style="color: #a0a0a0; font-size: 1.2rem;">➜</div>
+                            <div class="step-card p-2">
+                                <div class="mb-2" style="font-size: 1.5rem;">📊</div>
+                                <div class="small fw-bold text-light">Visualize</div>
+                                <div class="small" style="color: #a0a0a0;">Interactive Graph</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 rounded" style="background: rgba(255, 255, 255, 0.05); border: 1px solid #333;">
+                            <small style="color: #a0a0a0; display: block;">
+                                <strong class="text-white">Note:</strong> The system automatically clears previous records before each new scrape to ensure data freshness. 
+                                The visualization provides an interactive force-directed graph where you can zoom, pan, and explore hotel relationships.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #333;">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="input-section" class="card p-4 mt-4" style="max-width: 350px; display: none; width: 100%; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);">
+        <h4 class="mb-4 text-center fw-bold text-white" style="letter-spacing: 0.5px; font-size: 1.5rem;">Configuration</h4>
+        <div class="mb-4 text-start">
+            <label for="recordLimit" class="form-label text-white fw-bold" style="letter-spacing: 0.5px; font-size: 1.1rem; display: block; margin-bottom: 0.5rem;">Target Records</label>
+            <input type="number" class="form-control form-control-lg mb-2" id="recordLimit" min="10" max="100" value="10" 
+                   style="background-color: transparent; border: 1px solid #4a90e2; color: #fff; font-family: monospace; font-size: 1.2rem;">
+            <div class="form-text text-light" style="font-size: 0.9rem; opacity: 0.8;">Select volume (10-100)</div>
+        </div>
+        <button class="btn btn-primary w-100 py-2" onclick="startScraping()" style="border: 1px solid #85c1e9;">Start Extraction</button>
+    </div>
+
+    <div id="progress-section" class="mt-4 text-center" style="max-width: 500px; width: 100%; display: none;">
+        <h5 class="mb-3 text-light">Processing Data...</h5>
+        <div class="progress mb-3">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+        </div>
+        <p id="statusText" class="text-muted small">Initializing browser engine...</p>
+    </div>
+
+    <div id="result-section" class="mt-4" style="display: none;">
+        <div class="card p-4 text-center" style="max-width: 400px; width: 100%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);">
+            <h4 class="mb-3 text-white fw-bold">Extraction Complete</h4>
+            <p class="mb-4 text-light">Successfully harvested and stored dataset.</p>
+            <div class="d-grid gap-2">
+                <a href="/visualization" class="btn btn-primary">View Visualization</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showInput() {
+        document.getElementById('start-section').style.display = 'none';
+        document.getElementById('input-section').style.display = 'block';
+    }
+
+    function startScraping() {
+        const limit = document.getElementById('recordLimit').value;
+        if (limit < 10 || limit > 100) {
+            alert("Please enter a value between 10 and 100");
+            return;
+        }
+
+        document.getElementById('input-section').style.display = 'none';
+        document.getElementById('progress-section').style.display = 'block';
+
+        fetch('/start-scrape', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ limit: limit }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'started') {
+                pollStatus();
+            } else {
+                alert(data.message);
+                location.reload();
+            }
+        });
+    }
+
+    function pollStatus() {
+        let progress = 0;
+        const interval = setInterval(() => {
+            fetch('/status')
+            .then(response => response.json())
+            .then(data => {
+                const bar = document.getElementById('progressBar');
+                const text = document.getElementById('statusText');
+
+                text.innerText = data.message;
+                
+                if (data.is_scraping) {
+                    // Simulate smooth progress if status is running but no granular percentage
+                    if (progress < 90) {
+                        progress += 5;
+                        bar.style.width = progress + '%';
+                    }
+                } else if (data.message === 'Completed') {
+                    bar.style.width = '100%';
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('progress-section').style.display = 'none';
+                        document.getElementById('result-section').style.display = 'block';
+                    }, 800);
+                } else if (data.message === 'Error') {
+                    bar.classList.add('bg-danger');
+                    text.innerText = "Error: " + data.error;
+                    clearInterval(interval);
+                }
+            });
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
