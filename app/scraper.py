@@ -17,9 +17,15 @@ class BookingScraper:
         limit = max(10, min(100, int(limit)))
         print(f"Starting scrape for {limit} records...")
         
+        # Determine if we should run headless
+        # Default to False (Visible) on Windows/Mac for testing
+        # Force True (Invisible) on Linux/Servers (Vercel, Render, Docker)
+        is_server = os.name != 'nt' or os.environ.get('HEADLESS', 'false').lower() == 'true'
+        print(f"Running scraper with headless={is_server}")
+
         async with async_playwright() as p:
             # Headless must be True for server hosting (Vercel, Docker, etc.)
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=is_server)
             context = await browser.new_context(
                 user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             )
