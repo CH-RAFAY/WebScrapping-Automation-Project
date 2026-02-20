@@ -2,19 +2,19 @@
 
 A powerful full-stack application that scrapes hotel data from Booking.com and visualizes it as an interactive force-directed graph.
 
-## 🚀 Features
+##  Features
 - **Automated Scraping**: Uses Playwright to scrape real-time hotel data (prices, ratings, locations).
 - **Interactive Visualization**: D3.js force-directed graph to explore hotel relationships.
 - **Data Processing**: Automatic cleaning and formatting of scraped data using Pandas.
 - **Professional UI**: Modern dark-themed interface with neon accents and guided workflows.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Backend**: Python, Flask
 - **Scraping**: Playwright (Async)
 - **Data**: Pandas
 - **Frontend**: HTML5, CSS3 (Bootstrap 5), D3.js v7
 
-## 📦 Deployment Guide
+##  Deployment Guide
 
 ### Option 1: Vercel (Frontend & UI Only)
 **Note:** Vercel has a strict 50MB size limit for serverless functions. **Playwright browsers (Chromium) exceed this limit.**
@@ -38,7 +38,7 @@ For the scraper to work fully, you need a platform that supports Docker or large
 5. Select **Docker** as the Runtime.
 6. Click **Create Web Service**.
 
-## 💻 Local Development
+##  Local Development
 1. Clone the repo.
 2. Install dependencies:
    ```bash
