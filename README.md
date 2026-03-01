@@ -1,4 +1,4 @@
-# Booking.com Scraper & Visualizer
+Web-Scraper & Visualizer
 
 A powerful full-stack application that scrapes hotel data from Booking.com and visualizes it as an interactive force-directed graph.
 
